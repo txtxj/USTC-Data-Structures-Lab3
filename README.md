@@ -84,8 +84,3 @@ Output：
     （Tips：如果平均运行时间直接达到了 $25s$ 之内，也可以不进行 2 的展示，只进行 1 ， 4 的对比展示）
 
  - :本次实验如果在完成 1 的基础上又完成了 3 ，则需要在检查时向助教展示两个文件：即一开始预处理的稍微大一点的二进制文件和改进后压缩存储的稍微小一点的二进制文件，并且展示代码中读取改进后二进制文件的部分。
-
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
-</script>
