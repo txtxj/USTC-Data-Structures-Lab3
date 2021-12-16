@@ -4,6 +4,7 @@
 #define MAXEDGE 1000000
 #define MAXDIS 0x3f
 
+#include "FibHeap.cpp"
 #include "Graph.h"
 #include <cstring>
 #include <cstdio>
@@ -110,19 +111,23 @@ void Graph::DijkstraHeap(int u)
 	delete[] vis;
 }
 
-void Graph::DijkstraFibonacci(int u)
+void Graph::DijkstraFib(int u)
 {
 	bool* vis = new bool[MAXVEX];
 	std::memset(pre, 0, MAXVEX * sizeof(int));
 	std::memset(dis, MAXDIS, MAXVEX * sizeof(int));
 	std::memset(vis, 0, MAXVEX * sizeof(bool));
 	dis[u] = 0;
-	std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int> >, std::greater<std::pair<int, int> > > Q;
-	Q.push(std::pair<int, int>(0, u));
+	FibHeap<std::pair<int, int> >Q;
+	Q.makeHash(vexNum + 1);
+	for (int i = 1; i <= vexNum; i++)
+	{
+		Q.insert(std::pair<int, int>(dis[i], i), i);
+	}
 	while (!Q.empty())
 	{
-		int x = Q.top().second;
-		Q.pop();
+		int x = Q.minimum().second;
+		Q.removeMin();
 		if (vis[x])
 		{
 			continue;
@@ -132,9 +137,9 @@ void Graph::DijkstraFibonacci(int u)
 		{
 			if (!vis[edge[i].v] && dis[edge[i].v] > dis[x] + edge[i].dis)
 			{
+				Q.update(edge[i].v, std::pair<int, int>(dis[x] + edge[i].dis, edge[i].v));
 				pre[edge[i].v] = x;
 				dis[edge[i].v] = dis[x] + edge[i].dis;
-				Q.push(std::pair<int, int>(dis[edge[i].v], edge[i].v));
 			}
 		}
 	}

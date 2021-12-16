@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
 #include "Graph.cpp"
 
 using namespace std;
@@ -25,7 +26,7 @@ int main()
 	scanf("%d %d", &u, &v);
 	printf("Read Time: %ldms\n", clock() - st);
 
-	if (G.GetVexNum() <= 500000)
+	if (G.GetVexNum() <= 100000)
 	{
 		st = clock();
 		G.Dijkstra(u);
@@ -37,12 +38,8 @@ int main()
 	printf("DijkstraHeap Time: %ldms\n", clock() - st);
 
 	st = clock();
-	G.DijkstraHeap(u);
-	printf("DijkstraHeap Time: %ldms\n", clock() - st);
-
-	st = clock();
-	G.DijkstraFibonacci(u);
-	printf("DijkstraFibonacci Time: %ldms\n", clock() - st);
+	G.DijkstraFib(u);
+	printf("DijkstraFib Time: %ldms\n", clock() - st);
 
 	printf("Distance: %d", G.PrintPath(u, v));
 	return 0;

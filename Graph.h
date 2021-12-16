@@ -34,7 +34,7 @@ public:
 
 	void DijkstraHeap(int);
 
-	void DijkstraFibonacci(int);
+	void DijkstraFib(int);
 
 	const int PrintPath(int, int) const;
 };
