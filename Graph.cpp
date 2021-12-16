@@ -1,7 +1,7 @@
-#pragma once
+ #pragma once
 
-#define MAXVEX 1000000
-#define MAXEDGE 1000000
+#define MAXVEX 30000000
+#define MAXEDGE 60000000
 #define MAXDIS 0x3f
 
 #include "FibHeap.cpp"

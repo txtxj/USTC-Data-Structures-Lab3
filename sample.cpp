@@ -18,7 +18,8 @@ int main()
 	long st = clock();
 	while (~scanf("%d %d %d", &u, &v, &d))
 	{
-		m = m < u ? u : m < v ? v : m;
+		m = m < u ? u : m;
+		m = m < v ? v : m;
 		G.AddEdge(u, v, d);
 	}
 	G.SetVexNum(m);
