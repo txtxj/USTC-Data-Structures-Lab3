@@ -45,20 +45,10 @@ class FibHeap {
         void insert(T key, int k);
         // 移除斐波那契堆中的最小节点
         void removeMin();
-        // 将other合并到当前堆中
-        void combine(FibHeap<T> *other);
         // 获取斐波那契堆中最小键值，并保存到pkey中；成功返回true，否则返回false。
         T minimum(void);
         // 将斐波那契堆中键值oldkey更新为newkey
         void update(int k, T newkey);
-        // 删除键值为key的节点
-        void remove(T key);
-        // 斐波那契堆中是否包含键值key
-        bool contains(T key);
-        // 打印斐波那契堆
-        void print();
-        // 销毁
-        void destroy();
 
         bool empty();
 
@@ -81,28 +71,14 @@ class FibHeap {
         void makeCons();
         // 合并斐波那契堆的根链表中左右相同度数的树
         void consolidate();
-        // 修改度数
-        void renewDegree(FibNode<T> *parent, int degree);
         // 将node从父节点parent的子链接中剥离出来，并使node成为"堆的根链表"中的一员。
         void cut(FibNode<T> *node, FibNode<T> *parent);
         // 对节点node进行"级联剪切"
         void cascadingCut(FibNode<T> *node) ;
         // 将斐波那契堆中节点node的值减少为key
         void decrease(FibNode<T> *node, T key);
-        // 将斐波那契堆中节点node的值增加为key
-        void increase(FibNode<T> *node, T key);
         // 更新斐波那契堆的节点node的键值为key
         void update(FibNode<T> *node, T key);
-        // 在最小堆root中查找键值为key的节点
-        FibNode<T>* search(FibNode<T> *root, T key);
-        // 在斐波那契堆中查找键值为key的节点
-        FibNode<T>* search(T key);
-        // 删除结点node
-        void remove(FibNode<T> *node);
-        // 销毁斐波那契堆
-        void destroyNode(FibNode<T> *node);
-        // 打印"斐波那契堆"
-        void print(FibNode<T> *node, FibNode<T> *prev, int direction);
 };
 
 /*
@@ -197,44 +173,6 @@ void FibHeap<T>::catList(FibNode<T> *a, FibNode<T> *b)
     b->right->left = a;
     b->right       = tmp;
     tmp->left      = b;
-}
-
-
-/*
- * 将other合并到当前堆中
- */
-template <class T>
-void FibHeap<T>::combine(FibHeap<T> *other)
-{
-    if (other==NULL)
-        return ;
-
-    if(other->maxDegree > this->maxDegree)
-        swap(*this, *other);
-
-    if((this->min) == NULL)                // this无"最小节点"
-    {
-        this->min = other->min;
-        this->keyNum = other->keyNum;
-        free(other->cons);
-        delete other;
-    }
-    else if((other->min) == NULL)           // this有"最小节点" && other无"最小节点"
-    {
-        free(other->cons);
-        delete other;
-    }                                       // this有"最小节点" && other有"最小节点"
-    else
-    {
-        // 将"other中根链表"添加到"this"中
-        catList(this->min, other->min);
-
-        if (this->min->key > other->min->key)
-            this->min = other->min;
-        this->keyNum += other->keyNum;
-        free(other->cons);
-        delete other;
-    }
 }
 
 /*
@@ -398,16 +336,6 @@ T FibHeap<T>::minimum()
     return min -> key;
 }
 
-/*
- * 修改度数
- */
-template <class T>
-void FibHeap<T>::renewDegree(FibNode<T> *parent, int degree)
-{
-    parent->degree -= degree;
-    if (parent-> parent != NULL)
-        renewDegree(parent->parent, degree);
-}
 
 /*
  * 将node从父节点parent的子链接中剥离出来，
@@ -417,7 +345,6 @@ template <class T>
 void FibHeap<T>::cut(FibNode<T> *node, FibNode<T> *parent)
 {
     removeNode(node);
-    // renewDegree(parent, node->degree);
     parent->degree--;
     // node没有兄弟
     if (node == node->right)
@@ -481,55 +408,6 @@ void FibHeap<T>::decrease(FibNode<T> *node, T key)
         min = node;
 }
 
-/*
- * 将斐波那契堆中节点node的值增加为key
- */
-template <class T>
-void FibHeap<T>::increase(FibNode<T> *node, T key)
-{
-    FibNode<T> *child, *parent, *right;
-
-    if (min==NULL ||node==NULL)
-        return ;
-
-    // 将node每一个儿子(不包括孙子,重孙,...)都添加到"斐波那契堆的根链表"中
-    while (node->child != NULL)
-    {
-        child = node->child;
-        removeNode(child);               // 将child从node的子链表中删除
-        if (child->right == child)
-            node->child = NULL;
-        else
-            node->child = child->right;
-
-        addNode(child, min);       // 将child添加到根链表中
-        child->parent = NULL;
-    }
-    node->degree = 0;
-    node->key = key;
-
-    // 如果node不在根链表中，
-    //     则将node从父节点parent的子链接中剥离出来，
-    //     并使node成为"堆的根链表"中的一员，
-    //     然后进行"级联剪切"
-    // 否则，则判断是否需要更新堆的最小节点
-    parent = node->parent;
-    if(parent != NULL)
-    {
-        cut(node, parent);
-        cascadingCut(parent);
-    }
-    else if(min == node)
-    {
-        right = node->right;
-        while(right != node)
-        {
-            if(node->key > right->key)
-                min = right;
-            right = right->right;
-        }
-    }
-}
 
 /*
  * 更新斐波那契堆的节点node的键值为key
@@ -539,10 +417,6 @@ void FibHeap<T>::update(FibNode<T> *node, T key)
 {
     if(key < node->key)
         decrease(node, key);
-    else if(key > node->key)
-        increase(node, key);
-    else
-        cout << "No need to update!!!" << endl;
 }
 
 
@@ -554,164 +428,6 @@ void FibHeap<T>::update(int k, T newkey)
     node = hash[k];
     if (node!=NULL)
         update(node, newkey);
-}
-
-/*
- * 在最小堆root中查找键值为key的节点
- */
-template <class T>
-FibNode<T>* FibHeap<T>::search(FibNode<T> *root, T key)
-{
-    FibNode<T> *t = root;    // 临时节点
-    FibNode<T> *p = NULL;    // 要查找的节点
-
-    if (root==NULL)
-        return root;
-
-    do
-    {
-        if (t->key == key)
-        {
-            p = t;
-            break;
-        }
-        else
-        {
-            if ((p = search(t->child, key)) != NULL)
-                break;
-        }
-        t = t->right;
-    } while (t != root);
-
-    return p;
-}
-
-/*
- * 在斐波那契堆中查找键值为key的节点
- */
-template <class T>
-FibNode<T>* FibHeap<T>::search(T key)
-{
-    if (min==NULL)
-        return NULL;
-
-    return search(min, key);
-}
-
-/*
- * 在斐波那契堆中是否存在键值为key的节点。
- * 存在返回true，否则返回false。
- */
-template <class T>
-bool FibHeap<T>::contains(T key)
-{
-    return search(key)!=NULL ? true: false;
-}
-
-/*
- * 删除结点node
- */
-template <class T>
-void FibHeap<T>::remove(FibNode<T> *node)
-{
-    T m = min->key-1;
-    decrease(node, m-1);
-    removeMin();
-}
-
-template <class T>
-void FibHeap<T>::remove(T key)
-{
-    FibNode<T> *node;
-
-    if (min==NULL)
-        return ;
-
-    node = search(key);
-    if (node==NULL)
-        return ;
-
-    remove(node);
-}
-
-/*
- * 销毁斐波那契堆
- */
-template <class T>
-void FibHeap<T>::destroyNode(FibNode<T> *node)
-{
-    FibNode<T> *start = node;
-
-    if(node == NULL)
-        return;
-
-    do {
-        destroyNode(node->child);
-        // 销毁node，并将node指向下一个
-        node = node->right;
-        delete node->left;
-    } while(node != start);
-}
-
-template <class T>
-void FibHeap<T>::destroy()
-{
-    destroyNode(min);
-    free(cons);
-}
-
-/*
- * 打印"斐波那契堆"
- *
- * 参数说明：
- *     node       -- 当前节点
- *     prev       -- 当前节点的前一个节点(父节点or兄弟节点)
- *     direction  --  1，表示当前节点是一个左孩子;
- *                    2，表示当前节点是一个兄弟节点。
- */
-template <class T>
-void FibHeap<T>::print(FibNode<T> *node, FibNode<T> *prev, int direction)
-{
-    FibNode<T> *start=node;
-
-    if (node==NULL)
-        return ;
-    do
-    {
-        if (direction == 1)
-            cout << setw(8) << node->key << "(" << node->degree << ") is "<< setw(2) << prev->key << "'s child" << endl;
-        else
-            cout << setw(8) << node->key << "(" << node->degree << ") is "<< setw(2) << prev->key << "'s next" << endl;
-
-        if (node->child != NULL)
-            print(node->child, node, 1);
-
-        // 兄弟节点
-        prev = node;
-        node = node->right;
-        direction = 2;
-    } while(node != start);
-}
-
-template <class T>
-void FibHeap<T>::print()
-{
-    int i=0;
-    FibNode<T> *p;
-
-    if (min==NULL)
-        return ;
-
-    cout << "== 斐波那契堆的详细信息: ==" << endl;
-    p = min;
-    do {
-        i++;
-        cout << setw(2) << i << ". " << setw(4) << p->key << "(" << p->degree << ") is root" << endl;
-
-        print(p->child, p, 1);
-        p = p->right;
-    } while (p != min);
-    cout << endl;
 }
 
 template <class T>
