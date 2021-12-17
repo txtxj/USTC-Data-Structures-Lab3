@@ -28,10 +28,10 @@ inline int read(void)
 	return x;
 }
 
-int main()
+int main(int argc, char** argv)
 {
-	freopen("info.txt", "r", stdin);
-	freopen("info.bin", "wb", stdout);
+	freopen(argv[1], "r", stdin);
+	freopen(argv[2], "wb", stdout);
 	int cnt = 0;
 	while (true)
 	{
