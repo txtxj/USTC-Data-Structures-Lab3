@@ -10,7 +10,7 @@ public:
 	FibNode<T> *child;
 	FibNode<T> *parent;
 	bool marked;
-	FibNode(T value) : key(value), degree(0), left(this),right(this),child(NULL),parent(NULL), marked(false){}
+	FibNode(T value) : key(value), degree(0), left(this), right(this), child(NULL), parent(NULL), marked(false){}
 };
 
 template <class T>
