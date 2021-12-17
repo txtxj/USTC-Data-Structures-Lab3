@@ -119,15 +119,15 @@ void Graph::DijkstraFib(int u)
 	std::memset(vis, 0, MAXVEX * sizeof(bool));
 	dis[u] = 0;
 	FibHeap<std::pair<int, int> >Q;
-	Q.makeHash(vexNum + 1);
+	Q.MakeHash(vexNum + 1);
 	for (int i = 1; i <= vexNum; i++)
 	{
-		Q.insert(std::pair<int, int>(dis[i], i), i);
+		Q.Insert(std::pair<int, int>(dis[i], i), i);
 	}
-	while (!Q.empty())
+	while (!Q.Empty())
 	{
-		int x = Q.minimum().second;
-		Q.removeMin();
+		int x = Q.Minimum().second;
+		Q.RemoveMin();
 		if (vis[x])
 		{
 			continue;
@@ -137,7 +137,7 @@ void Graph::DijkstraFib(int u)
 		{
 			if (!vis[edge[i].v] && dis[edge[i].v] > dis[x] + edge[i].dis)
 			{
-				Q.update(edge[i].v, std::pair<int, int>(dis[x] + edge[i].dis, edge[i].v));
+				Q.Update(edge[i].v, std::pair<int, int>(dis[x] + edge[i].dis, edge[i].v));
 				pre[edge[i].v] = x;
 				dis[edge[i].v] = dis[x] + edge[i].dis;
 			}

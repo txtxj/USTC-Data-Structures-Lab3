@@ -10,7 +10,7 @@ Graph G(10000000);
 
 int main()
 {
-	freopen("info.txt", "r", stdin);
+	freopen("infoS.txt", "r", stdin);
 	freopen("output.txt", "w", stdout);
 	int u, v, d;
 	int m = 0;
@@ -23,7 +23,7 @@ int main()
 		G.AddEdge(u, v, d);
 	}
 	G.SetVexNum(m);
-	freopen("input.txt", "r", stdin);
+	freopen("inputS.txt", "r", stdin);
 	scanf("%d %d", &u, &v);
 	printf("Read Time: %ldms\n", clock() - st);
 
