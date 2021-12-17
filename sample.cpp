@@ -8,6 +8,29 @@ using namespace std;
 
 Graph G(10000000);
 
+static char buf[10000000];
+static char *st = buf, *ed = buf;
+inline char getc(void)
+{
+	return st == ed && (ed = (st = buf) + fread(buf, 1, 10000000, stdin), st == ed) ? EOF : *st++;
+}
+inline int read(void)
+{
+	int x = 0;
+	char c = getc();
+	while (c < '0' || c > '9')
+	{
+		if (c == EOF) return EOF;
+		c = getc();
+	}
+	while (c >= '0' && c <= '9')
+	{
+		x = (x << 1) + (x << 3) + (c ^ 48);
+		c = getc();
+	}
+	return x;
+}
+
 int main()
 {
 	freopen("info.txt", "r", stdin);
@@ -16,8 +39,12 @@ int main()
 	int m = 0;
 
 	long st = clock();
-	while (~scanf("%d %d %d", &u, &v, &d))
+	while (true)
 	{
+		u = read();
+		if (u == EOF) break;
+		v = read();
+		d = read();
 		m = m < u ? u : m;
 		m = m < v ? v : m;
 		G.AddEdge(u, v, d);
@@ -27,12 +54,12 @@ int main()
 	scanf("%d %d", &u, &v);
 	printf("Read Time: %ldms\n", clock() - st);
 
-	if (G.GetVexNum() <= 100000)
-	{
-		st = clock();
-		G.Dijkstra(u);
-		printf("Dijkstra Time: %ldms\n", clock() - st);
-	}
+	// if (G.GetVexNum() <= 100000)
+	// {
+	// 	st = clock();
+	// 	G.Dijkstra(u);
+	// 	printf("Dijkstra Time: %ldms\n", clock() - st);
+	// }
 
 	st = clock();
 	G.DijkstraHeap(u);

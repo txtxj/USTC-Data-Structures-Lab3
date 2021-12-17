@@ -20,7 +20,7 @@ FibHeap<T>::~FibHeap()
 
 
 template <class T>
-void FibHeap<T>::RemoveNode(FibNode<T> *node)
+inline void FibHeap<T>::RemoveNode(FibNode<T> *node)
 {
 	node -> left -> right = node -> right;
 	node -> right -> left = node -> left;
@@ -28,7 +28,7 @@ void FibHeap<T>::RemoveNode(FibNode<T> *node)
 
 
 template <class T>
-void FibHeap<T>::AddNode(FibNode<T> *node, FibNode<T> *root)
+inline void FibHeap<T>::AddNode(FibNode<T> *node, FibNode<T> *root)
 {
 	node -> left = root -> left;
 	root -> left -> right = node;
@@ -38,7 +38,7 @@ void FibHeap<T>::AddNode(FibNode<T> *node, FibNode<T> *root)
 
 
 template <class T>
-void FibHeap<T>::Insert(FibNode<T> *node)
+inline void FibHeap<T>::Insert(FibNode<T> *node)
 {
 	if (keyNum == 0)
 	{
@@ -57,7 +57,7 @@ void FibHeap<T>::Insert(FibNode<T> *node)
 
 
 template <class T>
-void FibHeap<T>::Insert(T key, int k)
+inline void FibHeap<T>::Insert(T key, int k)
 {
 	FibNode<T> *node;
 	node = new FibNode<T>(key);
@@ -69,7 +69,7 @@ void FibHeap<T>::Insert(T key, int k)
 
 
 template <class T>
-void FibHeap<T>::CatList(FibNode<T> *a, FibNode<T> *b)
+inline void FibHeap<T>::CatList(FibNode<T> *a, FibNode<T> *b)
 {
 	FibNode<T> *tmp;
 	tmp = a -> right;
@@ -81,7 +81,7 @@ void FibHeap<T>::CatList(FibNode<T> *a, FibNode<T> *b)
 
 
 template <class T>
-FibNode<T>* FibHeap<T>::ExtractMin()
+inline FibNode<T>* FibHeap<T>::ExtractMin()
 {
 	FibNode<T> *p = min;
 	if (p == p -> right)
@@ -99,7 +99,7 @@ FibNode<T>* FibHeap<T>::ExtractMin()
 
 
 template <class T>
-void FibHeap<T>::Link(FibNode<T>* node, FibNode<T>* root)
+inline void FibHeap<T>::Link(FibNode<T>* node, FibNode<T>* root)
 {
 	RemoveNode(node);
 	if (root -> child == NULL)
@@ -118,7 +118,7 @@ void FibHeap<T>::Link(FibNode<T>* node, FibNode<T>* root)
 
 
 template <class T>
-void FibHeap<T>::Consolidate()
+inline void FibHeap<T>::Consolidate()
 {
 	int d, maxDegree;
 	FibNode<T> *x, *y;
@@ -165,7 +165,7 @@ void FibHeap<T>::Consolidate()
 
 
 template <class T>
-void FibHeap<T>::RemoveMin()
+inline void FibHeap<T>::RemoveMin()
 {
 	if (min == NULL) return;
 	FibNode<T> *child = NULL;
@@ -201,14 +201,14 @@ void FibHeap<T>::RemoveMin()
 
 
 template <class T>
-T FibHeap<T>::Minimum()
+inline T FibHeap<T>::Minimum()
 {
 	return min -> key;
 }
 
 
 template <class T>
-void FibHeap<T>::Cut(FibNode<T> *node, FibNode<T> *parent)
+inline void FibHeap<T>::Cut(FibNode<T> *node, FibNode<T> *parent)
 {
 	RemoveNode(node);
 	parent -> degree--;
@@ -228,7 +228,7 @@ void FibHeap<T>::Cut(FibNode<T> *node, FibNode<T> *parent)
 
 
 template <class T>
-void FibHeap<T>::CascadingCut(FibNode<T> *node)
+inline void FibHeap<T>::CascadingCut(FibNode<T> *node)
 {
 	FibNode<T> *parent = node -> parent;
 	if (parent != NULL)
@@ -247,7 +247,7 @@ void FibHeap<T>::CascadingCut(FibNode<T> *node)
 
 
 template <class T>
-void FibHeap<T>::Update(int k, T key)
+inline void FibHeap<T>::Update(int k, T key)
 {
 	FibNode<T> *node = hash[k];
 	FibNode<T> *parent;
@@ -266,13 +266,13 @@ void FibHeap<T>::Update(int k, T key)
 }
 
 template <class T>
-bool FibHeap<T>::Empty()
+inline bool FibHeap<T>::Empty()
 {
 	return min == NULL;
 }
 
 template <class T>
-void FibHeap<T>::MakeHash(int n)
+inline void FibHeap<T>::MakeHash(int n)
 {
 	hash = new FibNode<T>*[n];
 	cons = new FibNode<T>*[int(log(n) / log(2.0)) + 2];
