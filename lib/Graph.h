@@ -30,11 +30,11 @@ public:
 
 	void AddEdge(int, int, int);
 
-	void Dijkstra(int);
+	void Dijkstra(int, int);
 
-	void DijkstraHeap(int);
+	void DijkstraHeap(int, int);
 
-	void DijkstraFib(int);
+	void DijkstraFib(int, int);
 
 	const int PrintPath(int, int) const;
 };

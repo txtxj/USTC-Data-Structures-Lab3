@@ -1,4 +1,4 @@
- #pragma once
+#pragma once
 
 #define MAXVEX 30000000
 #define MAXEDGE 60000000
@@ -48,7 +48,7 @@ void Graph::AddEdge(int u, int v, int d)
 	head[u] = edgeNum;
 }
 
-void Graph::Dijkstra(int u)
+void Graph::Dijkstra(int u, int v)
 {
 	bool* vis = new bool[MAXVEX];
 	std::memset(pre, 0, MAXVEX * sizeof(int));
@@ -58,6 +58,7 @@ void Graph::Dijkstra(int u)
 	dis[s] = 0;
 	while (!vis[s])
 	{
+		if (s == v) break;
 		vis[s] = true;
 		for (int i = head[s]; i != 0; i = edge[i].nxt)
 		{
@@ -80,7 +81,7 @@ void Graph::Dijkstra(int u)
 	delete[] vis;
 }
 
-void Graph::DijkstraHeap(int u)
+void Graph::DijkstraHeap(int u, int v)
 {
 	bool* vis = new bool[MAXVEX];
 	std::memset(pre, 0, MAXVEX * sizeof(int));
@@ -92,6 +93,7 @@ void Graph::DijkstraHeap(int u)
 	while (!Q.empty())
 	{
 		int x = Q.top().second;
+		if (x == v) break;
 		Q.pop();
 		if (vis[x])
 		{
@@ -111,7 +113,7 @@ void Graph::DijkstraHeap(int u)
 	delete[] vis;
 }
 
-void Graph::DijkstraFib(int u)
+void Graph::DijkstraFib(int u, int v)
 {
 	bool* vis = new bool[MAXVEX];
 	std::memset(pre, 0, MAXVEX * sizeof(int));
@@ -127,6 +129,7 @@ void Graph::DijkstraFib(int u)
 	while (!Q.Empty())
 	{
 		int x = Q.Minimum().second;
+		if (x == v) break;
 		Q.RemoveMin();
 		if (vis[x])
 		{

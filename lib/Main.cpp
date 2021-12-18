@@ -32,16 +32,16 @@ int main(int argc, char** argv)
 	if (G.GetVexNum() <= 100000)
 	{
 		st = clock();
-		G.Dijkstra(u);
+		G.Dijkstra(u, v);
 		printf("Dijkstra Time: %ldms\n", clock() - st);
 	}
 
 	st = clock();
-	G.DijkstraHeap(u);
+	G.DijkstraHeap(u, v);
 	printf("DijkstraHeap Time: %ldms\n", clock() - st);
 
 	st = clock();
-	G.DijkstraFib(u);
+	G.DijkstraFib(u, v);
 	printf("DijkstraFib Time: %ldms\n", clock() - st);
 
 	printf("Distance: %d", G.PrintPath(u, v));
