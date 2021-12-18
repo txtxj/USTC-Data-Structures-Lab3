@@ -16,6 +16,7 @@ if sel == 1:
 		print("请输入查询文件的文件名")
 		inputName = input()
 		if os.path.isfile(inputName):
+			print("正在查询最短路径")
 			os.system("Main.exe cache/info.bin output.txt " + inputName)
 			print("查询结束，查询结果保存于 output.txt")
 		else:
@@ -29,6 +30,7 @@ else:
 		print("请输入查询文件的文件名")
 		inputName = input()
 		if os.path.isfile(inputName):
+			print("正在查询最短路径")
 			os.system("Main.exe " + infoName +" output.txt " + inputName)
 			print("查询结束，查询结果保存于 output.txt")
 		else:
