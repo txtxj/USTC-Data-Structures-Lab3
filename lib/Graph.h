@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GRAPH
+#define GRAPH
 
 class Graph
 {
@@ -38,3 +39,5 @@ public:
 
 	const int PrintPath(int, int) const;
 };
+
+#endif

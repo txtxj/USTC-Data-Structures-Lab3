@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FIBHEAP
+#define FIBHEAP
 
 template <class T>
 class FibNode {
@@ -41,3 +42,5 @@ private:
 	void Cut(FibNode<T>*, FibNode<T>*);
 	void CascadingCut(FibNode<T>*) ;
 };
+
+#endif
