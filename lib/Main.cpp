@@ -10,19 +10,34 @@ Graph G(10000000);
 
 static int buf[200000000];
 
+int p = 0, cnt = 0;
+
+int read()
+{
+	if (p >= cnt) return -1;
+	else return buf[p++];
+}
+
 int main(int argc, char** argv)
 {
 	freopen(argv[1], "rb", stdin);
 	freopen(argv[2], "w", stdout);
-	int cnt = fread(buf, sizeof(int), 200000000, stdin);
-	int u, v, m = 0;
+	cnt = fread(buf, sizeof(int), 200000000, stdin);
+	int u, v, m = 0, e, b, c;
 
 	long st = clock();
-	for (int i = 0; i < cnt; i += 3)
+
+	while (true)
 	{
-		m = m < buf[i] ? buf[i] : m;
-		m = m < buf[i + 1] ? buf[i + 1] : m;
-		G.AddEdge(buf[i], buf[i + 1], buf[i + 2]);
+		e = read();
+		if (e == -1) break;
+		for (int i = 0; i < e; i++)
+		{
+			b = read();
+			c = read();
+			G.AddEdge(m, b, c);
+		}
+		m++;
 	}
 	G.SetVexNum(m);
 	freopen(argv[3], "r", stdin);

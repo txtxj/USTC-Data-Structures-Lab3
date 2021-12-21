@@ -1,5 +1,8 @@
+#define MAXVEX 30000000
+
 #include <cstdlib>
 #include <cstdio>
+#include <vector>
 
 using namespace std;
 
@@ -32,6 +35,8 @@ inline int read(void)
 	return x;
 }
 
+vector<pair<int, int> > v[MAXVEX];
+
 // argv[1] info.txt
 // argv[2] info.bin
 int main(int argc, char** argv)
@@ -39,13 +44,26 @@ int main(int argc, char** argv)
 	freopen(argv[1], "r", stdin);
 	freopen(argv[2], "wb", stdout);
 	int cnt = 0;
+	int a = 0, b = 0, c = 0;
+	int maxv = 0;
 	while (true)
 	{
-		output[cnt] = read();
-		if (output[cnt] == EOF) break;
-		output[cnt + 1] = read();
-		output[cnt + 2] = read();
-		cnt += 3;
+		a = read();
+		if (a == EOF) break;
+		b = read();
+		c = read();
+		if (a > maxv) maxv = a;
+		if (b > maxv) maxv = b;
+		v[a].push_back(pair<int, int>(b, c));
+	}
+	for (int i = 0; i <= maxv; i++)
+	{
+		output[cnt++] = v[i].size();
+		for (auto u : v[i])
+		{
+			output[cnt++] = u.first;
+			output[cnt++] = u.second;
+		}
 	}
 	fwrite(output, 1, cnt * sizeof(int), stdout);
 	return 0;
