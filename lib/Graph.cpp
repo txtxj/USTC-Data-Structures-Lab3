@@ -128,10 +128,7 @@ void Graph::DijkstraFib(const int u, const int v)
 	dis[u] = 0;
 	FibHeap<pair<int, int> >Q;
 	Q.MakeHash(vexNum + 1);
-	for (int i = 1; i <= vexNum; i++)
-	{
-		Q.Insert(pair<int, int>(dis[i], i), i);
-	}
+	Q.Insert(pair<int, int>(0, u), u);
 	while (!Q.Empty())
 	{
 		int x = Q.Minimum().second;
@@ -146,7 +143,14 @@ void Graph::DijkstraFib(const int u, const int v)
 		{
 			if (!vis[edge[i].v] && dis[edge[i].v] > dis[x] + edge[i].dis)
 			{
-				Q.Update(edge[i].v, pair<int, int>(dis[x] + edge[i].dis, edge[i].v));
+				if (Q.hash[edge[i].v] == nullptr)
+				{
+					Q.Insert(pair<int, int>(dis[x] + edge[i].dis, edge[i].v), edge[i].v);
+				}
+				else
+				{
+					Q.Update(edge[i].v, pair<int, int>(dis[x] + edge[i].dis, edge[i].v));
+				}
 				pre[edge[i].v] = x;
 				dis[edge[i].v] = dis[x] + edge[i].dis;
 			}

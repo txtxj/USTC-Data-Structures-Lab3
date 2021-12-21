@@ -20,8 +20,8 @@ private:
 	int keyNum;				// 结点个数
 	FibNode<T> *min;		// 最小节点
 	FibNode<T> **cons;		// Consolidate辅助空间
+public:
 	FibNode<T> **hash;		// 映射空间
-
 public:
 	FibHeap();
 	~FibHeap();
