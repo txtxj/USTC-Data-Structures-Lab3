@@ -1,5 +1,3 @@
-#pragma once
-
 #define MAXVEX 30000000
 #define MAXEDGE 60000000
 #define MAXDIS 0x3f
@@ -11,7 +9,15 @@
 #include <utility>
 #include <queue>
 
-Graph::Graph(int n = 0)
+using std::printf;
+using std::putchar;
+using std::pair;
+using std::priority_queue;
+using std::greater;
+using std::memset;
+using std::vector;
+
+Graph::Graph(const int n)
 {
 	vexNum = n;
 	edgeNum = 0;
@@ -21,7 +27,7 @@ Graph::Graph(int n = 0)
 	pre = new int[MAXVEX];
 	dis = new int[MAXVEX];
 
-	std::memset(head, 0, MAXVEX * sizeof(int));
+	memset(head, 0, MAXVEX * sizeof(int));
 }
 
 Graph::~Graph()
@@ -32,28 +38,28 @@ Graph::~Graph()
 	delete[] dis;
 }
 
-void Graph::SetVexNum(int n)
+void Graph::SetVexNum(const int n)
 {
 	vexNum = n;
 }
 
-const int Graph::GetVexNum(void) const
+const int Graph::GetVexNum() const
 {
 	return vexNum;
 }
 
-void Graph::AddEdge(int u, int v, int d)
+void Graph::AddEdge(const int u, const int v, const int d)
 {
 	edge[++edgeNum] = Arc{v, d, head[u]};
 	head[u] = edgeNum;
 }
 
-void Graph::Dijkstra(int u, int v)
+void Graph::Dijkstra(const int u, const int v)
 {
 	bool* vis = new bool[MAXVEX];
-	std::memset(pre, 0, MAXVEX * sizeof(int));
-	std::memset(dis, MAXDIS, MAXVEX * sizeof(int));
-	std::memset(vis, 0, MAXVEX * sizeof(bool));
+	memset(pre, 0, MAXVEX * sizeof(int));
+	memset(dis, MAXDIS, MAXVEX * sizeof(int));
+	memset(vis, 0, MAXVEX * sizeof(bool));
 	int s = u;
 	dis[s] = 0;
 	while (!vis[s])
@@ -81,15 +87,15 @@ void Graph::Dijkstra(int u, int v)
 	delete[] vis;
 }
 
-void Graph::DijkstraHeap(int u, int v)
+void Graph::DijkstraHeap(const int u, const int v)
 {
 	bool* vis = new bool[MAXVEX];
-	std::memset(pre, 0, MAXVEX * sizeof(int));
-	std::memset(dis, MAXDIS, MAXVEX * sizeof(int));
-	std::memset(vis, 0, MAXVEX * sizeof(bool));
+	memset(pre, 0, MAXVEX * sizeof(int));
+	memset(dis, MAXDIS, MAXVEX * sizeof(int));
+	memset(vis, 0, MAXVEX * sizeof(bool));
 	dis[u] = 0;
-	std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int> >, std::greater<std::pair<int, int> > > Q;
-	Q.push(std::pair<int, int>(0, u));
+	priority_queue<pair<int, int>, vector<pair<int, int> >, greater<pair<int, int> > > Q;
+	Q.push(pair<int, int>(0, u));
 	while (!Q.empty())
 	{
 		int x = Q.top().second;
@@ -106,25 +112,25 @@ void Graph::DijkstraHeap(int u, int v)
 			{
 				pre[edge[i].v] = x;
 				dis[edge[i].v] = dis[x] + edge[i].dis;
-				Q.push(std::pair<int, int>(dis[edge[i].v], edge[i].v));
+				Q.push(pair<int, int>(dis[edge[i].v], edge[i].v));
 			}
 		}
 	}
 	delete[] vis;
 }
 
-void Graph::DijkstraFib(int u, int v)
+void Graph::DijkstraFib(const int u, const int v)
 {
 	bool* vis = new bool[MAXVEX];
-	std::memset(pre, 0, MAXVEX * sizeof(int));
-	std::memset(dis, MAXDIS, MAXVEX * sizeof(int));
-	std::memset(vis, 0, MAXVEX * sizeof(bool));
+	memset(pre, 0, MAXVEX * sizeof(int));
+	memset(dis, MAXDIS, MAXVEX * sizeof(int));
+	memset(vis, 0, MAXVEX * sizeof(bool));
 	dis[u] = 0;
-	FibHeap<std::pair<int, int> >Q;
+	FibHeap<pair<int, int> >Q;
 	Q.MakeHash(vexNum + 1);
 	for (int i = 1; i <= vexNum; i++)
 	{
-		Q.Insert(std::pair<int, int>(dis[i], i), i);
+		Q.Insert(pair<int, int>(dis[i], i), i);
 	}
 	while (!Q.Empty())
 	{
@@ -140,7 +146,7 @@ void Graph::DijkstraFib(int u, int v)
 		{
 			if (!vis[edge[i].v] && dis[edge[i].v] > dis[x] + edge[i].dis)
 			{
-				Q.Update(edge[i].v, std::pair<int, int>(dis[x] + edge[i].dis, edge[i].v));
+				Q.Update(edge[i].v, pair<int, int>(dis[x] + edge[i].dis, edge[i].v));
 				pre[edge[i].v] = x;
 				dis[edge[i].v] = dis[x] + edge[i].dis;
 			}
@@ -149,22 +155,22 @@ void Graph::DijkstraFib(int u, int v)
 	delete[] vis;
 }
 
-const int Graph::PrintPath(int u, int v) const
+const int Graph::PrintPath(const int u, const int v) const
 {
-	int* st = new int[MAXVEX];
-	int top = 0;
-	while (u != v)
+	auto st = new int[MAXVEX];
+	int top = 0, vv = v;
+	while (u != vv)
 	{
-		st[++top] = v;
-		v = pre[v];
+		st[++top] = vv;
+		vv = pre[vv];
 	}
-	std::printf("PATH: %d", u);
+	printf("PATH: %d", u);
 	while (top)
 	{
-		std::printf(" -> %d", st[top--]);
+		printf(" -> %d", st[top--]);
 	}
-	std::putchar('\n');
-	v = st[1];
+	putchar('\n');
+	vv = st[1];
 	delete[] st;
-	return dis[v];
+	return dis[vv];
 }
