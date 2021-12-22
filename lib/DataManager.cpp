@@ -56,6 +56,11 @@ int main(int argc, char** argv)
 		if (b > maxv) maxv = b;
 		v[a].push_back(pair<int, int>(b, c));
 	}
+	// 对于每一个顶点，
+	// 不记录其顶点编号，只记录其出度 d_i
+	// 其后为 2 * d_i 个整数，表示 d_i 条边
+	// 共计需要记录 |V| 个出度、 |E| 个边，每条边两个数据
+	// 总数据量为严格的 |V| + 2 * |E| 
 	for (int i = 0; i <= maxv; i++)
 	{
 		output[cnt++] = v[i].size();
